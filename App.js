@@ -5,8 +5,23 @@ import {styles} from './App.styles'
 import {currencies} from './src/constants/currencies'
 import { Input } from './src/components/Input';
 import { ResultCard } from './src/components/ResultCard';
+import { exchangeRateApi } from './src/services/api';
+import { useState } from 'react';
 
 export default function App() {
+  const [amount, setAmount] = useState('')
+  const [fromCurrency, setFromCurrency] = useState('USD')
+  const [toCurrency, setToCurrency] = useState('BRL')
+  const [result, setResult] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [exchangeRate, setExchangeRate] = useState(null)
+
+
+  async function convertendoTeste(){
+  const data = await exchangeRateApi('BRL')
+  console.log(data)
+}
+
   return (
     <KeyboardAvoidingView
     style={styles.container}
@@ -25,7 +40,8 @@ export default function App() {
             {currencies.map(currency => (
               <Button variant='primary'
               key={currency.code}
-              currency={currency}>
+              currency={currency}
+              onPress={() => setFromCurrency(currency.code)}>
               </Button>
             ))}
           </View>  
@@ -40,12 +56,16 @@ export default function App() {
             {currencies.map(currency => (
               <Button variant='secondary'
               key={currency.code}
-              currency={currency}>
+              currency={currency}
+              onPress={() => setToCurrency(currency.code)}
+              isSelected={true}>
               </Button>
             ))}
           </View>
         </View>
-        <TouchableOpacity style={styles.convertButton}>
+        <TouchableOpacity 
+        style={styles.convertButton}
+        onPress={convertendoTeste}>
           <Text style={styles.swapButtonText}>
             Converter
           </Text>
